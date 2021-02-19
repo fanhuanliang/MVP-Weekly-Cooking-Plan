@@ -1,35 +1,151 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
 import List from './components/List.jsx';
+import WeeklyPlan from './components/WeeklyPlan.jsx';
+import AddRecipe from './components/AddRecipe.jsx';
+import axios from 'axios';
+import Data from './components/Data.jsx';
+import ShoppingList from './components/ShoppingList.jsx';
+import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      items: []
+    this.state = {
+      recipes: [],
+      currentDate: [],
+      currentData: [],
+      update: true,
+      isOpen:false,
+      // passToList:[],
+      pass: true,
+      openList: false
     }
   }
 
-  componentDidMount() {
-    $.ajax({
-      url: '/items', 
-      success: (data) => {
-        this.setState({
-          items: data
+  sortRecipe(style) {
+    // console.log(style.target.value)
+      this.setState({
+      pass: false})
+    this.getData(style.target.value)
+  }
+
+  changePass() {
+    this.setState({
+      pass: false})
+  }
+  currentDate(e, idx) {
+    // console.log(e)
+    // if (this.state.update === true) {
+      // console.log('clickDate',this.state.currentData)
+      this.setState({
+        currentDate: [e, idx],
+        update: false,
+        pass: true
+      })
+    // }
+    // console.log(this.state.currentDate)
+  }
+  addMeal(e) {
+    // console.log(this.state.currentDate)
+    if (this.state.update === false) {
+      this.setState({
+        currentData:[{
+          idx: this.state.currentDate[1],
+          style: this.state.currentDate[0],
+          meal: e.target.innerHTML
+        }],
+        currentDate: [],
+        update: true
+      })
+    }
+    // console.log(this.state.currentData)
+  }
+
+  postData(e, item, style, ingredients, directions, nutritionInfo) {
+    e.preventDefault();
+    // console.log(item, style, ingredients, directions, nutritionInfo)
+    const data = {
+      item: item,
+      style: style,
+      ingredients: ingredients,
+      directions: directions,
+      nutritionInfo: nutritionInfo
+    }
+    // console.log(data.item!== '')
+    if (data.item !== '' && data.style !== '' && data.ingredients !== ''&&data.directions !== '' && data.nutritionInfo !== '') {
+      axios.post('/items', data)
+        .then((response) => {
+          // console.log(response);
+          this.getData();
         })
-      },
-      error: (err) => {
-        console.log('err', err);
-      }
+        .catch((error) => {
+          console.log(error);
+        })
+        .then(() => {
+          // console.log(response);
+          this.setState({isOpen:false})
+        })
+    } else {
+      alert('cannot be blank')
+    }
+  }
+
+  getData(sortData) {
+    // console.log(sortData)
+    axios.get(`/items/${sortData}`)
+      .then((response) => {
+        // handle success
+        // console.log(response.data);
+        this.setState({
+          recipes: response.data,
+          // passToList: response.data
+        })
+      })
+      .catch((error) => {
+        // handle error
+        console.log(error);
+      })
+  }
+
+  deleteData(e) {
+    // console.log(e.target.value)
+    axios.delete(`/items/${e.target.value}`)
+    .then((res) => {
+      // console.log('hey')
+      this.getData()
+    })
+    .catch((err) => {
+      console.log(err);
     });
   }
 
-  render () {
-    return (<div>
-      <h1>Item List</h1>
-      <List items={this.state.items}/>
-    </div>)
+  componentDidMount() {
+    this.getData()
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Weekly Cooking Plan</h1>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <Data />
+            <WeeklyPlan currentDate={this.currentDate.bind(this)} currentData={this.state.currentData} update={this.state.update} pass={this.state.pass}/>
+            <Button variant="contained" size="small" color="primary" onClick={()=>this.setState({openList:true,pass: false})}>Finish</Button>
+            <ShoppingList openList={this.state.openList} closeList={()=>this.setState({openList: false, pass: false})} />
+          </Grid>
+          <Grid item xs={6}>
+            <Button  variant="contained" size="small" color="primary" onClick={()=>this.setState({isOpen:true, pass: false})}>Add Recipe</Button>
+            <AddRecipe open={this.state.isOpen} onClose={() =>this.setState({isOpen:false})} postData={this.postData.bind(this)} />
+            <List sortRecipe={this.sortRecipe.bind(this)} recipes={this.state.recipes} addMeal={this.addMeal.bind(this)} getData={this.getData.bind(this)} pass={this.changePass.bind(this)} deleteData={this.deleteData.bind(this)} />
+          </Grid>
+        </Grid>
+
+
+      </div>
+    )
   }
 }
 

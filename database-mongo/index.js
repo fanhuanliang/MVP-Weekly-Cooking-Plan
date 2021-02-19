@@ -11,21 +11,67 @@ db.once('open', function() {
   console.log('mongoose connected successfully');
 });
 
-var itemSchema = mongoose.Schema({
-  quantity: Number,
-  description: String
+var recipeSchema = mongoose.Schema({
+  nutritionInfo: String, // time for cooking
+  style: String, // breakfast, lunch or dinner
+  ingredients: String, // per serving
+  item: String,
+  directions: String // steps
 });
 
-var Item = mongoose.model('Item', itemSchema);
+var Recipe = mongoose.model('Recipe', recipeSchema);
 
-var selectAll = function(callback) {
-  Item.find({}, function(err, items) {
-    if(err) {
-      callback(err, null);
-    } else {
-      callback(null, items);
-    }
-  });
+var selectAll = function(data, callback) {
+  // console.log('data',typeof data)
+  if (data === 'undefined') {
+    Recipe.find({}, function(err, recipes) {
+      if(err) {
+        callback(err, null);
+      } else {
+        callback(null, recipes);
+      }
+    });
+  } else {
+    // console.log('data',data)
+    Recipe.find({style: { $in: data}}, function(err, recipes) {
+      if(err) {
+        callback(err, null);
+      } else {
+        // console.log('break', recipes)
+        callback(null, recipes);
+      }
+    });
+  }
 };
 
-module.exports.selectAll = selectAll;
+var saveRecipe = function(data, callback) {
+  // console.log(data)
+  const recipe = new Recipe(data);
+  recipe.save(function(err, results) {
+    if(err) {
+      // console.log('err')
+      callback(err, null);
+    } else {
+      // console.log('db succuss', results)
+      callback(null, results);
+    }
+  })
+}
+
+const deleteRecipe = function(data, callback) {
+  // console.log('db', data)
+  Recipe.deleteOne(data, function(err, recipes) {
+    if(err) {
+      console.log('err')
+      callback(err, null);
+    } else {
+      // console.log('break')
+      callback(null, recipes);
+    }
+  });
+}
+module.exports ={
+  selectAll,
+  saveRecipe,
+  deleteRecipe
+}
