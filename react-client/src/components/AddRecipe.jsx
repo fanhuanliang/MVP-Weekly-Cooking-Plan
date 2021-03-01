@@ -22,7 +22,6 @@ const Outer_Styles = {
   backgroundColor: 'rgba(0, 0, 0, .7)',
   zIndex: 1000
 }
-// const unit = ['', 'teaspoon', 'tablespoon', 'fluid ounce', 'cup', 'quart', 'pound', 'ounce'];
 const AddRecipe = ({ open, children, onClose, postData}) => {
   const [item, setItem] = useState('');
   const [style, setStyle] = useState('Breakfast');
@@ -38,7 +37,6 @@ const AddRecipe = ({ open, children, onClose, postData}) => {
     setNutritionInfo('')
   }
   if (!open) return null
-  // console.log(postData)
   return (
     <div style={Outer_Styles}>
       <form style={AddRecipe_Styles} onSubmit={(e) => (
@@ -55,7 +53,6 @@ const AddRecipe = ({ open, children, onClose, postData}) => {
       <div>
         <label>
           Style:
-          {/* <input type="text" value={style} onChange={e => setStyle(e.target.value)} /> */}
           <select onChange={e => setStyle(e.target.value)}>
             <option value="Breakfast">Breakfast</option>
             <option value="Lunch">Lunch</option>

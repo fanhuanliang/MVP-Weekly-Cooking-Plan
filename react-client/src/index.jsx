@@ -18,14 +18,12 @@ class App extends React.Component {
       currentData: [],
       update: true,
       isOpen:false,
-      // passToList:[],
       pass: true,
       openList: false
     }
   }
 
   sortRecipe(style) {
-    // console.log(style.target.value)
       this.setState({
       pass: false})
     this.getData(style.target.value)
@@ -36,19 +34,13 @@ class App extends React.Component {
       pass: false})
   }
   currentDate(e, idx) {
-    // console.log(e)
-    // if (this.state.update === true) {
-      // console.log('clickDate',this.state.currentData)
       this.setState({
         currentDate: [e, idx],
         update: false,
         pass: true
       })
-    // }
-    // console.log(this.state.currentDate)
   }
   addMeal(e) {
-    // console.log(this.state.currentDate)
     if (this.state.update === false) {
       this.setState({
         currentData:[{
@@ -60,12 +52,10 @@ class App extends React.Component {
         update: true
       })
     }
-    // console.log(this.state.currentData)
   }
 
   postData(e, item, style, ingredients, directions, nutritionInfo) {
     e.preventDefault();
-    // console.log(item, style, ingredients, directions, nutritionInfo)
     const data = {
       item: item,
       style: style,
@@ -73,18 +63,15 @@ class App extends React.Component {
       directions: directions,
       nutritionInfo: nutritionInfo
     }
-    // console.log(data.item!== '')
     if (data.item !== '' && data.style !== '' && data.ingredients !== ''&&data.directions !== '' && data.nutritionInfo !== '') {
       axios.post('/items', data)
         .then((response) => {
-          // console.log(response);
           this.getData();
         })
         .catch((error) => {
           console.log(error);
         })
         .then(() => {
-          // console.log(response);
           this.setState({isOpen:false})
         })
     } else {
@@ -93,27 +80,20 @@ class App extends React.Component {
   }
 
   getData(sortData) {
-    // console.log(sortData)
     axios.get(`/items/${sortData}`)
       .then((response) => {
-        // handle success
-        // console.log(response.data);
         this.setState({
           recipes: response.data,
-          // passToList: response.data
         })
       })
       .catch((error) => {
-        // handle error
         console.log(error);
       })
   }
 
   deleteData(e) {
-    // console.log(e.target.value)
     axios.delete(`/items/${e.target.value}`)
     .then((res) => {
-      // console.log('hey')
       this.getData()
     })
     .catch((err) => {

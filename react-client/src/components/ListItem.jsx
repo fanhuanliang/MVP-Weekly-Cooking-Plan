@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 
 const ListItem = (props) => {
-  // console.log(props)
   return (
     <div className='recipeList'>
        <Button variant="contained" color="primary">

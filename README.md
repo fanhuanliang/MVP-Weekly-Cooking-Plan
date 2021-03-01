@@ -3,6 +3,9 @@ MVP
 ## Heading ##
 Weekly Cooking Plan
 
+## To Start ##
+ npm install npm run react-dev npm run server-dev
+
 ## Summary ##
 It's a dynamic application website for plan the weekly cook schedule. Customers could input the menu they want and select it to the correspond list of the weekly section. For instant, user could pick the menu and select it on day that from the monday thu Sunday. Eventually, it will generate a plan form for customer.
 

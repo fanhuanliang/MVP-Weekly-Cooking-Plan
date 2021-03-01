@@ -3,10 +3,8 @@ import ListItem from './ListItem.jsx';
 import Checkbox from '@material-ui/core/Checkbox';
 
 const List = (props) => {
-  // console.log(props)
   const [style, setStyle] = useState([]);
   const handleCheck =(e)=> {
-    // console.log('check',e.target.value)
     let data=style;
     if (style.indexOf(e.target.value) === -1) {
       data.push(e.target.value)

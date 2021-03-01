@@ -54,23 +54,15 @@ const day = [
 ];
 
 const deleteMeal = (e, style, idx) => {
-  // console.log(e.target.innerHTML, style, idx);
   const date = Object.keys(day[idx])[0];
   const arr = day[idx][date][style];
   const index = arr.indexOf(e.target.innerHTML);
   arr.splice(index, 1);
-  // console.log(date)
-  // console.log(day[idx][date][style])
-  // console.log(index)
-  // console.log(arr)
-  // console.log(day[idx])
 
 }
 
 const WeeklyPlan = (props) => {
-  // console.log('week',props.update)
   if (props.currentData.length !== 0 && props.update === true && props.pass) {
-    // console.log(props.update)
     for (let i = 0; i < props.currentData.length; i++) {
       let index = props.currentData[i].idx;
       let obj = Object.values(day[props.currentData[i].idx])[0];
@@ -81,7 +73,6 @@ const WeeklyPlan = (props) => {
         }
       }
     }
-    // console.log(day)
   }
   return (
     <div className='weekly'>

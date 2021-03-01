@@ -22,7 +22,6 @@ const OVERLAY_STYLES = {
 }
 
 const ShoppingList = (props) => {
-  // console.log(props)
   if(!props.openList) return null;
   return (
     <div style={OVERLAY_STYLES}>

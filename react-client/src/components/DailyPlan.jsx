@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 
 const DailyPlan = (props) => {
-  // console.log(props.date)
   const [isOpen, setIsOpen] = useState(false);
   const [icon, setIcon] = useState(false);
   const handleOpen = () => {
@@ -14,7 +13,6 @@ const DailyPlan = (props) => {
   const dataStyle = {
 
   }
-  // console.log(isOpen)
   return (
     <div className='daily'>
       <div className='dailyPlan'>
